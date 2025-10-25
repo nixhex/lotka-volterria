@@ -80,26 +80,28 @@ float Creature::Distance(Creature c1, Creature c2)
                     + std::powf(c1.Position()[1] - c2.Position()[1], 2));
 }
 
-Field::Field(std::vector<sf::Sprite>* sprites, sf::RenderWindow* window, int numPrey, int numPred)
+Field::Field(std::vector<sf::Sprite>& sprites, sf::RenderWindow& window, int numPrey, int numPred)
 {
-    sf::Texture sheep, wolf;
-    sheep.loadFromMemory(src_sprites_spritesheet_png,
+    auto window_dimensions = window.getSize();
+    unsigned width =  window_dimensions.x;
+    unsigned height = window_dimensions.y;
+    preyTexture.loadFromMemory(src_sprites_spritesheet_png,
         src_sprites_spritesheet_png_len, false,
-        sf::IntRect(SHEEP_POSE_1, SPRITE_DIMS));
-    sf::Sprite sheepSprite(sheep);
+        sf::IntRect(PREY_POSE_1, SPRITE_DIMS));
+    sf::Sprite preySprite(preyTexture);
     
-    wolf.loadFromMemory(src_sprites_spritesheet_png,
+    predatorTexture.loadFromMemory(src_sprites_spritesheet_png,
         src_sprites_spritesheet_png_len, false,
-        sf::IntRect(WOLF_POSE_1, SPRITE_DIMS));
-    sf::Sprite wolfSprite(wolf);
-    sprites->push_back(sheepSprite);
-    sprites->push_back(wolfSprite);
+        sf::IntRect(PREDATOR_POSE_1, SPRITE_DIMS));
+    sf::Sprite predatorSprite(predatorTexture);
+    sprites.push_back(preySprite);
+    sprites.push_back(predatorSprite);
 
-    sprites->at(0).setOrigin({sprite_width/2, sprite_height/2});
-    sprites->at(0).setPosition({100.f, 100.f});
-    sprites->at(0).setScale({4.f, 4.f});
+    sprites.at(0).setOrigin({sprite_width/2, sprite_height/2});
+    sprites.at(0).setPosition({100.f, 100.f});
+    sprites.at(0).setScale({4.f, 4.f});
 
-    sprites->at(1).setOrigin({sprite_width/2, sprite_height/2});
-    sprites->at(1).setPosition({200.f, 100.f});
-    sprites->at(1).setScale({-4.f, 4.f});
+    sprites.at(1).setOrigin({sprite_width/2, sprite_height/2});
+    sprites.at(1).setPosition({200.f, 100.f});
+    sprites.at(1).setScale({-4.f, 4.f});
 }

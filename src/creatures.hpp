@@ -8,21 +8,21 @@
 #include <cmath>
 #include <ctime>
 
-constexpr int sheep_row         = 21;
-constexpr int sheep_col         = 0;
+constexpr int prey_row         = 21; // 21 for sheep facing side
+constexpr int prey_col         = 0; // 0-7 for sheep
 constexpr int sprite_width      = 16;
 constexpr int sprite_height     = 16;
 
-constexpr sf::Vector2i SHEEP_POSE_1 {
-    sheep_col*sprite_width,
-    sheep_row*sprite_height
+constexpr sf::Vector2i PREY_POSE_1 {
+    prey_col*sprite_width,
+    prey_row*sprite_height
 };
 
-constexpr int wolf_row =  24;
-constexpr int wolf_col =   8;
-constexpr sf::Vector2i WOLF_POSE_1 {
-    wolf_col*sprite_width,
-    wolf_row*sprite_height
+constexpr int predator_row =  24; // 24 for wolves facing side
+constexpr int predator_col =   8; // 8-11 for brown/white wolves
+constexpr sf::Vector2i PREDATOR_POSE_1 {
+    predator_col*sprite_width,
+    predator_row*sprite_height
 };
 
 constexpr sf::Vector2i SPRITE_DIMS{sprite_width, sprite_height};
@@ -58,9 +58,10 @@ protected:
 class Field
 {
 public:
-    Field(std::vector<sf::Sprite>*, sf::RenderWindow*, int, int);
+    Field(std::vector<sf::Sprite>&, sf::RenderWindow&, int, int);
     std::vector<Creature> Creatures();
     sf::RenderWindow RenderWindow();
 protected:
+    sf::Texture preyTexture, predatorTexture; // make as members of object so they don't dissappear
     time_t last_time;
 };
