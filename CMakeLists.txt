@@ -12,6 +12,6 @@ FetchContent_Declare(SFML
     SYSTEM)
 FetchContent_MakeAvailable(SFML)
 
-add_executable(lotka-volterria src/main.cpp)
+add_executable(lotka-volterria src/main.cpp src/creatures.cpp src/assets/spritesheet_png.cpp)
 target_compile_features(lotka-volterria PRIVATE cxx_std_17)
 target_link_libraries(lotka-volterria PRIVATE SFML::Graphics)
