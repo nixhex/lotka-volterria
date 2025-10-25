@@ -4,4 +4,4 @@ out
 .idea
 .vs
 .vscode
-.src/sprites
+src/sprites
