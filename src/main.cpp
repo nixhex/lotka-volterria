@@ -25,7 +25,6 @@ int main()
             window.clear();
             for (Creature& creature : field.GetCreatures())
             {
-                //creature.Sound();
                 window.draw(creature.GetSprite());           
             }
 

@@ -7,31 +7,7 @@
 #include <array>
 #include <cmath>
 #include <ctime>
-
-constexpr std::string_view prey_name = "Sheep";
-constexpr std::string_view predator_name = "Wolf";
-
-constexpr std::string_view prey_sound = "Baaah";
-constexpr std::string_view predator_sound = "Awooooo";
-
-constexpr int prey_row         = 21; // 21 for sheep facing side
-constexpr int prey_col         = 0; // 0-7 for sheep
-constexpr int sprite_width      = 16;
-constexpr int sprite_height     = 16;
-
-constexpr sf::Vector2i PREY_POSE_1 {
-    prey_col*sprite_width,
-    prey_row*sprite_height
-};
-
-constexpr int predator_row =  24; // 24 for wolves facing side
-constexpr int predator_col =   4; // 8-11 for brown/white wolves
-constexpr sf::Vector2i PREDATOR_POSE_1 {
-    predator_col*sprite_width,
-    predator_row*sprite_height
-};
-
-constexpr sf::Vector2i SPRITE_DIMS{sprite_width, sprite_height};
+#include "constants.hpp"
 
 class Creature
 {

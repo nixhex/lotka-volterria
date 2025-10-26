@@ -1,10 +1,10 @@
 #include <SFML/Graphics.hpp>
 #include "field.hpp"
 #include "assets/spritesheet_png.hpp"
+#include "constants.hpp"
 
 Field::Field(sf::RenderWindow& window, int numPrey, int numPred)
 {
-    std::cout << "field initiated" << std::endl;
     auto window_dimensions = window.getSize();
     unsigned width =  window_dimensions.x;
     unsigned height = window_dimensions.y;
@@ -12,13 +12,13 @@ Field::Field(sf::RenderWindow& window, int numPrey, int numPred)
     //this->predatorTexture.setSmooth(true);
     if(!this->preyTexture.loadFromMemory(src_sprites_spritesheet_png,
         src_sprites_spritesheet_png_len, false,
-        sf::IntRect(PREY_POSE_1, SPRITE_DIMS))) std::cout << "prey texture not loaded" << std::endl;
+        frameRect(SpeciesRole::Predator, Direction::Side, 0))) std::cout << "prey texture not loaded" << std::endl;
     Creature creature1(sf::Sprite(this->preyTexture), prey_name, prey_sound);
     this->creatures.push_back(creature1);
 
     if(!this->predatorTexture.loadFromMemory(src_sprites_spritesheet_png,
         src_sprites_spritesheet_png_len, false,
-        sf::IntRect(PREDATOR_POSE_1, SPRITE_DIMS))) std::cout << "predator texture not loaded" << std::endl;
+        frameRect(SpeciesRole::Prey, Direction::Down, 1))) std::cout << "predator texture not loaded" << std::endl;
     Creature creature2(sf::Sprite(this->predatorTexture), predator_name, predator_sound);
     this->creatures.push_back(creature2);
     
