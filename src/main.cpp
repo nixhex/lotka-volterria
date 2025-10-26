@@ -1,7 +1,8 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <iostream>
-#include "creatures.hpp"
+#include "creature.hpp"
+#include "field.hpp"
 
 int main()
 {
