@@ -8,14 +8,18 @@
 #include "assets/spritesheet_png.hpp"
 #include "creatures.hpp"
 
-Creature::Creature()
+Creature::Creature(const sf::Sprite& sprite, 
+    std::string_view species, std::string_view sound) : // initializer list
+    sprite_(sprite), species_(species), sound_(sound) // makes copies of these values
 {
-
+    // this->species = std::string(species);
+    // this->sound = std::string(sound);
+    // this->sprite = sprite;
 }
 
 std::string Creature::Species()
 {
-    return this->species;
+    return this->species_;
 }
 
 void Creature::Eat()
@@ -26,6 +30,11 @@ void Creature::Eat()
 void Creature::Move()
 {
 
+}
+
+void Creature::Sound()
+{
+    std::cout << this->sound_ << "\n";
 }
 
 void Creature::Sleep()
@@ -80,28 +89,63 @@ float Creature::Distance(Creature c1, Creature c2)
                     + std::powf(c1.Position()[1] - c2.Position()[1], 2));
 }
 
-Field::Field(std::vector<sf::Sprite>& sprites, sf::RenderWindow& window, int numPrey, int numPred)
+sf::Sprite& Creature::GetSprite()
 {
+    return this->sprite_;
+}
+
+void Creature::SetSpriteOrigin(sf::Vector2f origin)
+{
+    this->sprite_.setOrigin({static_cast<float>(origin.x), static_cast<float>(origin.y)});
+}
+
+void Creature::SetSpritePosition(sf::Vector2f position)
+{
+    this->sprite_.setPosition({static_cast<float>(position.x), static_cast<float>(position.y)});
+}
+
+void Creature::SetSpriteScale(sf::Vector2f scale)
+{
+    this->sprite_.setScale({static_cast<float>(scale.x), static_cast<float>(scale.y)});
+}
+
+Field::Field(sf::RenderWindow& window, int numPrey, int numPred)
+{
+    std::cout << "field initiated" << std::endl;
     auto window_dimensions = window.getSize();
     unsigned width =  window_dimensions.x;
     unsigned height = window_dimensions.y;
-    preyTexture.loadFromMemory(src_sprites_spritesheet_png,
+    //this->preyTexture.setSmooth(true);
+    //this->predatorTexture.setSmooth(true);
+    if(!this->preyTexture.loadFromMemory(src_sprites_spritesheet_png,
         src_sprites_spritesheet_png_len, false,
-        sf::IntRect(PREY_POSE_1, SPRITE_DIMS));
-    sf::Sprite preySprite(preyTexture);
+        sf::IntRect(PREY_POSE_1, SPRITE_DIMS))) std::cout << "prey texture not loaded" << std::endl;
+    Creature creature1(sf::Sprite(this->preyTexture), prey_name, prey_sound);
+    this->creatures.push_back(creature1);
+
+    if(!this->predatorTexture.loadFromMemory(src_sprites_spritesheet_png,
+        src_sprites_spritesheet_png_len, false,
+        sf::IntRect(PREDATOR_POSE_1, SPRITE_DIMS))) std::cout << "predator texture not loaded" << std::endl;
+    Creature creature2(sf::Sprite(this->predatorTexture), predator_name, predator_sound);
+    this->creatures.push_back(creature2);
     
-    predatorTexture.loadFromMemory(src_sprites_spritesheet_png,
-        src_sprites_spritesheet_png_len, false,
-        sf::IntRect(PREDATOR_POSE_1, SPRITE_DIMS));
-    sf::Sprite predatorSprite(predatorTexture);
-    sprites.push_back(preySprite);
-    sprites.push_back(predatorSprite);
+    //this->creatures.at(0).Sound();
+    this->creatures.at(0).SetSpriteOrigin({sprite_width/2, sprite_height/2});
+    this->creatures.at(0).SetSpritePosition({100, 100});
+    this->creatures.at(0).SetSpriteScale({4.f, 4.f});
 
-    sprites.at(0).setOrigin({sprite_width/2, sprite_height/2});
-    sprites.at(0).setPosition({100.f, 100.f});
-    sprites.at(0).setScale({4.f, 4.f});
+    //this->creatures.at(1).Sound();
+    this->creatures.at(1).SetSpriteOrigin({sprite_width/2, sprite_height/2});
+    this->creatures.at(1).SetSpritePosition({200, 100});
+    this->creatures.at(1).SetSpriteScale({-4.f, 4.f});
+}
 
-    sprites.at(1).setOrigin({sprite_width/2, sprite_height/2});
-    sprites.at(1).setPosition({200.f, 100.f});
-    sprites.at(1).setScale({-4.f, 4.f});
+std::vector<Creature>& Field::GetCreatures()
+{
+    return this->creatures;
+}
+
+const Creature& Field::GetCreature(int index)
+{
+    return this->creatures.at(index);
 }

@@ -9,8 +9,7 @@ int main()
     window.setFramerateLimit(144);
     try {
         std::vector<sf::Sprite> sprites;
-        Field field(sprites, window, 250, 250); // populate sprites vector
-        std::cout << "sprites.size() = " << sprites.size() << std::endl;
+        Field field(window, 250, 250); // populate field
         
         while (window.isOpen())
         {
@@ -23,10 +22,12 @@ int main()
             }
 
             window.clear();
-            // loop through sprites vector and draw them
-            for (const sf::Sprite sprite : sprites) {
-                window.draw(sprite);
+            for (Creature& creature : field.GetCreatures())
+            {
+                //creature.Sound();
+                window.draw(creature.GetSprite());           
             }
+
             window.display();
         }
     } catch (const sf::Exception& e) {

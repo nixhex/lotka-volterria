@@ -8,6 +8,12 @@
 #include <cmath>
 #include <ctime>
 
+constexpr std::string_view prey_name = "Sheep";
+constexpr std::string_view predator_name = "Wolf";
+
+constexpr std::string_view prey_sound = "Baaah";
+constexpr std::string_view predator_sound = "Awooooo";
+
 constexpr int prey_row         = 21; // 21 for sheep facing side
 constexpr int prey_col         = 0; // 0-7 for sheep
 constexpr int sprite_width      = 16;
@@ -19,20 +25,22 @@ constexpr sf::Vector2i PREY_POSE_1 {
 };
 
 constexpr int predator_row =  24; // 24 for wolves facing side
-constexpr int predator_col =   8; // 8-11 for brown/white wolves
+constexpr int predator_col =   4; // 8-11 for brown/white wolves
 constexpr sf::Vector2i PREDATOR_POSE_1 {
     predator_col*sprite_width,
     predator_row*sprite_height
 };
 
 constexpr sf::Vector2i SPRITE_DIMS{sprite_width, sprite_height};
+
 class Creature
 {
 public:
-    Creature();
+    Creature(const sf::Sprite&, std::string_view, std::string_view);
     std::string Species();
     void Eat();
     void Move();
+    void Sound();
     void Sleep();
     bool MateWith(Creature);
     void Die();
@@ -44,24 +52,34 @@ public:
     std::time_t TimeBorn();
     std::time_t Age();
     static float Distance(Creature, Creature);
+    sf::Sprite& GetSprite();
+    void SetSpriteOrigin(sf::Vector2f);
+    void SetSpritePosition(sf::Vector2f);
+    void SetSpriteScale(sf::Vector2f);
 
-protected:
-    std::string species;
+    protected:
+    std::string species_;
     float hunger = 0;
     float libido = 0;
     std::array<float, 2> velocity;
     std::array<float, 2> position;
     std::time_t timeborn;
     std::time_t age;
+    std::string sound_;
+    sf::Sprite sprite_;
 };
 
 class Field
 {
 public:
-    Field(std::vector<sf::Sprite>&, sf::RenderWindow&, int, int);
-    std::vector<Creature> Creatures();
+    Field(sf::RenderWindow&, int, int);
+    std::vector<Creature>& Creatures();
     sf::RenderWindow RenderWindow();
+    std::vector<Creature>& GetCreatures();
+    const Creature& GetCreature(int);
+
 protected:
     sf::Texture preyTexture, predatorTexture; // make as members of object so they don't dissappear
     time_t last_time;
+    std::vector<Creature> creatures;
 };
