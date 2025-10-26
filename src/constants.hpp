@@ -17,6 +17,7 @@ constexpr int predator_row_offset = 24; // 24: side poses for wolf; +1 for down,
 constexpr int predator_col_offset = 8; // 8: default position for wolf; cycle +1, +2, +3 for pose change (walking?)
 
 enum class Direction : int { Side = 0, Down = 1, Up = 2 };
+enum class Face : int { Left = -1, Right = 1};
 enum SpeciesRole { Prey, Predator };
 
 constexpr sf::Vector2i poseOffset(SpeciesRole role, Direction dir, int frame)

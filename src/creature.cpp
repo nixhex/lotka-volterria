@@ -5,16 +5,23 @@
 #include <cmath>
 #include <ctime>
 #include <random>
+#include <unordered_map>
 #include "assets/spritesheet_png.hpp"
 #include "creature.hpp"
 #include "field.hpp"
 #include "constants.hpp"
+#include "AssetManager.hpp"
 
-Creature::Creature(const sf::Sprite& sprite, 
-    std::string_view species, std::string_view sound) : // initializer list
-    sprite_(sprite), species_(species), sound_(sound) // makes copies of these values
+Creature::Creature(const sf::Texture& sheet, SpeciesRole role, Direction dir, Face face,
+        sf::Vector2f position, 
+        sf::Vector2f scale, 
+        int frame) : sprite_(sheet, frameRect(role, dir, frame)), 
+        role_(role), face_(face), direction_(dir), frame_(frame % 3)
 {
-    
+    this->species_ = (role == SpeciesRole::Prey) ? prey_name : predator_name;
+    this->SetSpriteScale({((float)this->face_)*static_cast<float>(scale.x), static_cast<float>(scale.y)});
+    this->SetSpriteOrigin({sprite_width/2, sprite_height/2});
+    this->SetSpritePosition({static_cast<float>(position.x), static_cast<float>(position.y)});
 }
 
 std::string Creature::Species()
@@ -50,43 +57,48 @@ bool Creature::MateWith(Creature)
 
 float Creature::Hunger()
 {
-    return this->hunger;
+    return this->hunger_;
 }
 
 float Creature::Libido()
 {
-    return this->hunger;
+    return this->libido_;
 }
 
 std::array<float, 2> Creature::Velocity()
 {
-    return this->velocity; // default
+    return this->velocity_; // default
 }
 
 float Creature::Speed()
 {
-    return (float) std::sqrtf(std::powf(this->velocity[0], 2) + std::powf(this->velocity[1], 2));
+    return (float) std::sqrtf(std::powf(this->velocity_[0], 2) + std::powf(this->velocity_[1], 2));
 }
 
 std::array<float, 2> Creature::Position()
 {
-    return this->position; // default 
+    return this->position_; // default 
 }
 
 std::time_t Creature::TimeBorn()
 {
-    return this->timeborn;
+    return this->timeborn_;
 }
 
 std::time_t Creature::Age()
 {
-    return this->age;
+    return this->age_;
 }
 
 float Creature::Distance(Creature c1, Creature c2)
 {
     return std::sqrtf(std::powf(c1.Position()[0] - c2.Position()[0], 2) 
                     + std::powf(c1.Position()[1] - c2.Position()[1], 2));
+}
+
+void Creature::update(float dt)
+{
+    std::cout << "updating with time dt: " << dt << std::endl;
 }
 
 sf::Sprite& Creature::GetSprite()

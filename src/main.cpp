@@ -3,14 +3,19 @@
 #include <iostream>
 #include "creature.hpp"
 #include "field.hpp"
+#include "AssetManager.hpp"
+#include "assets/spritesheet_png.hpp"
 
 int main()
 {
     auto window = sf::RenderWindow(sf::VideoMode({1920u, 1080u}), "Lotka-Volterria");
+    AssetManager assets;
+    // add spritesheet from memory to asset manager
+    assets.requireTextMem("sheet", src_sprites_spritesheet_png, src_sprites_spritesheet_png_len);
     window.setFramerateLimit(144);
     try {
         std::vector<sf::Sprite> sprites;
-        Field field(window, 250, 250); // populate field
+        Field field(assets, window, 250, 250); // create a field - pass it the asset manager and window for max information
         
         while (window.isOpen())
         {

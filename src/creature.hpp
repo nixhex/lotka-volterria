@@ -7,12 +7,16 @@
 #include <array>
 #include <cmath>
 #include <ctime>
+#include <unordered_map>
 #include "constants.hpp"
 
 class Creature
 {
 public:
-    Creature(const sf::Sprite&, std::string_view, std::string_view);
+    Creature(const sf::Texture&, SpeciesRole, Direction, Face, 
+        sf::Vector2f position, 
+        sf::Vector2f scale, 
+        int frame);
     std::string Species();
     void Eat();
     void Move();
@@ -32,16 +36,26 @@ public:
     void SetSpriteOrigin(sf::Vector2f);
     void SetSpritePosition(sf::Vector2f);
     void SetSpriteScale(sf::Vector2f);
+    // draw and animate
+    void update(float);
+    void draw(sf::RenderTarget& rt) const { rt.draw(sprite_); }
 
-    protected:
+protected:
     std::string species_;
-    float hunger = 0;
-    float libido = 0;
-    std::array<float, 2> velocity;
-    std::array<float, 2> position;
-    std::time_t timeborn;
-    std::time_t age;
+    float hunger_ = 0;
+    float libido_ = 0;
+    std::array<float, 2> velocity_;
+    std::array<float, 2> position_;
+    std::time_t timeborn_;
+    std::time_t age_;
     std::string sound_;
+    sf::Texture texture_;
     sf::Sprite sprite_;
+    sf::RenderWindow window_;
+    SpeciesRole role_;
+    bool sprite_mirrored_ = false;
+    Direction direction_;
+    Face face_;
+    int frame_;
 };
 

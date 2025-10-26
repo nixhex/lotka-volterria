@@ -1,42 +1,32 @@
 #include <SFML/Graphics.hpp>
+#include <unordered_map>
+#include "AssetManager.hpp"
+#include "creature.hpp" 
 #include "field.hpp"
 #include "assets/spritesheet_png.hpp"
 #include "constants.hpp"
 
-Field::Field(sf::RenderWindow& window, int numPrey, int numPred)
+Field::Field(AssetManager& assets, sf::RenderWindow& window, int numPrey, int numPred) : 
+    assets_(assets), window_(window)
 {
     auto window_dimensions = window.getSize();
     unsigned width =  window_dimensions.x;
     unsigned height = window_dimensions.y;
-    //this->preyTexture.setSmooth(true);
-    //this->predatorTexture.setSmooth(true);
-    if(!this->preyTexture.loadFromMemory(src_sprites_spritesheet_png,
-        src_sprites_spritesheet_png_len, false,
-        frameRect(SpeciesRole::Predator, Direction::Side, 0))) std::cout << "prey texture not loaded" << std::endl;
-    Creature creature1(sf::Sprite(this->preyTexture), prey_name, prey_sound);
-    this->creatures.push_back(creature1);
+    const auto& sheet = assets.getTexture("sheet");
+    creatures_.reserve(numPred + numPrey);
 
-    if(!this->predatorTexture.loadFromMemory(src_sprites_spritesheet_png,
-        src_sprites_spritesheet_png_len, false,
-        frameRect(SpeciesRole::Prey, Direction::Down, 1))) std::cout << "predator texture not loaded" << std::endl;
-    Creature creature2(sf::Sprite(this->predatorTexture), predator_name, predator_sound);
-    this->creatures.push_back(creature2);
-    
-    this->creatures.at(0).SetSpriteOrigin({sprite_width/2, sprite_height/2});
-    this->creatures.at(0).SetSpritePosition({100, 100});
-    this->creatures.at(0).SetSpriteScale({4.f, 4.f});
-
-    this->creatures.at(1).SetSpriteOrigin({sprite_width/2, sprite_height/2});
-    this->creatures.at(1).SetSpritePosition({200, 100});
-    this->creatures.at(1).SetSpriteScale({-4.f, 4.f});
+    this->creatures_.emplace_back(sheet, SpeciesRole::Prey, 
+        Direction::Side, Face::Right, sf::Vector2f{100, 100}, sf::Vector2f{4.f, 4.f}, 0);
+    this->creatures_.emplace_back(sheet, SpeciesRole::Predator, 
+        Direction::Side, Face::Left, sf::Vector2f{250, 100}, sf::Vector2f{4.f, 4.f}, 0);
 }
 
 std::vector<Creature>& Field::GetCreatures()
 {
-    return this->creatures;
+    return this->creatures_;
 }
 
 const Creature& Field::GetCreature(int index)
 {
-    return this->creatures.at(index);
+    return this->creatures_.at(index);
 }
