@@ -1,5 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include <unordered_map>
+#include <random>
 #include "AssetManager.hpp"
 #include "creature.hpp" 
 #include "field.hpp"
@@ -15,10 +16,37 @@ Field::Field(AssetManager& assets, sf::RenderWindow& window, int numPrey, int nu
     const auto& sheet = assets.getTexture("sheet");
     creatures_.reserve(numPred + numPrey);
 
-    this->creatures_.emplace_back(sheet, SpeciesRole::Prey, 
-        Direction::Side, Face::Right, sf::Vector2f{100, 100}, sf::Vector2f{4.f, 4.f}, 0);
-    this->creatures_.emplace_back(sheet, SpeciesRole::Predator, 
-        Direction::Side, Face::Left, sf::Vector2f{250, 100}, sf::Vector2f{4.f, 4.f}, 0);
+    std::random_device rd;
+    std::mt19937 engine(rd());
+
+    std::uniform_int_distribution<int> dist_x((int) sprite_width/2*scale_factor, (int) window_dimensions.x-sprite_width/2*scale_factor);
+    std::uniform_int_distribution<int> dist_y((int) sprite_height/2*scale_factor, (int) window_dimensions.y-sprite_height/2*scale_factor);
+    std::uniform_int_distribution<int> dist_direction(static_cast<int>(Direction::Side), static_cast<int>(Direction::Up));
+    std::bernoulli_distribution dist_face(0.5);
+    int /*face,*/ direction;
+    Face face;
+
+    for (int i=0; i<numPrey; i++)
+    {
+        direction = dist_direction(engine);
+        //face = 2*dist_face(engine)-1;
+        face = dist_face(engine) ? Face::Right : Face::Left;
+        this->creatures_.emplace_back(sheet, SpeciesRole::Prey,
+            static_cast<Direction>(direction), face, 
+            sf::Vector2f{static_cast<float>(dist_x(engine)), static_cast<float>(dist_y(engine))},
+            sf::Vector2f{scale_factor, scale_factor}, 0);
+    }  
+
+    for (int i=0; i<numPred; i++)
+    {
+        direction = dist_direction(engine);
+        //face = 2*dist_face(engine)-1;
+        face = dist_face(engine) ? Face::Right : Face::Left;
+        this->creatures_.emplace_back(sheet, SpeciesRole::Predator,
+            static_cast<Direction>(direction), face, 
+            sf::Vector2f{static_cast<float>(dist_x(engine)), static_cast<float>(dist_y(engine))},
+            sf::Vector2f{scale_factor, scale_factor}, 0);
+    }   
 }
 
 std::vector<Creature>& Field::GetCreatures()

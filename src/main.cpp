@@ -15,7 +15,7 @@ int main()
     window.setFramerateLimit(144);
     try {
         std::vector<sf::Sprite> sprites;
-        Field field(assets, window, 250, 250); // create a field - pass it the asset manager and window for max information
+        Field field(assets, window, 1000, 1000); // create a field - pass it the asset manager and window for max information
         
         while (window.isOpen())
         {

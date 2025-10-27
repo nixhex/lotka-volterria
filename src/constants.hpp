@@ -16,6 +16,8 @@ constexpr int prey_col_offset = 0; // 0: default position for sheep; cycle +1, +
 constexpr int predator_row_offset = 24; // 24: side poses for wolf; +1 for down, +2 for up
 constexpr int predator_col_offset = 8; // 8: default position for wolf; cycle +1, +2, +3 for pose change (walking?)
 
+constexpr float scale_factor = 2.f;
+
 enum class Direction : int { Side = 0, Down = 1, Up = 2 };
 enum class Face : int { Left = -1, Right = 1};
 enum SpeciesRole { Prey, Predator };
