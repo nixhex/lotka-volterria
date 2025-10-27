@@ -9,11 +9,12 @@
 #include <ctime>
 #include <unordered_map>
 #include "constants.hpp"
+#include "settings.hpp"
 
 class Creature
 {
 public:
-    Creature(const sf::Texture&, SpeciesRole, Direction, Face, 
+    Creature(const Settings&, const sf::Texture&, SpeciesRole, Direction, Face, 
         sf::Vector2f position, 
         sf::Vector2f scale, 
         int frame);
@@ -52,6 +53,7 @@ protected:
     sf::Texture texture_;
     sf::Sprite sprite_;
     sf::RenderWindow window_;
+    const Settings& settings_;
     SpeciesRole role_;
     bool sprite_mirrored_ = false;
     Direction direction_;

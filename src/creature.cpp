@@ -1,26 +1,24 @@
 #include <string>
 #include <iostream>
 #include <vector>
-#include <array>
 #include <cmath>
 #include <ctime>
-#include <random>
-#include <unordered_map>
 #include "assets/spritesheet_png.hpp"
 #include "creature.hpp"
 #include "field.hpp"
 #include "constants.hpp"
 #include "AssetManager.hpp"
+#include "settings.hpp"
 
-Creature::Creature(const sf::Texture& sheet, SpeciesRole role, Direction dir, Face face,
+Creature::Creature(const Settings& settings, const sf::Texture& sheet, SpeciesRole role, Direction dir, Face face,
         sf::Vector2f position, 
-        sf::Vector2f scale, 
-        int frame) : sprite_(sheet, frameRect(role, dir, frame)), 
+        sf::Vector2f scale,
+        int frame) : settings_(settings), sprite_(sheet, frameRect(settings, role, dir, frame)), 
         role_(role), face_(face), direction_(dir), frame_(frame % 3)
 {
-    this->species_ = (role == SpeciesRole::Prey) ? prey_name : predator_name;
+    this->species_ = (role == SpeciesRole::Prey) ? this->settings_.prey_name : this->settings_.predator_name;
     this->SetSpriteScale({((float)this->face_)*static_cast<float>(scale.x), static_cast<float>(scale.y)});
-    this->SetSpriteOrigin({sprite_width/2, sprite_height/2});
+    this->SetSpriteOrigin({static_cast<float>(this->settings_.sprite_width/2), static_cast<float>(this->settings_.sprite_height/2)});
     this->SetSpritePosition({static_cast<float>(position.x), static_cast<float>(position.y)});
 }
 
