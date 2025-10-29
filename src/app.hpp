@@ -7,12 +7,15 @@
 #include "AssetManager.hpp"
 #include "creature.hpp"
 #include "settings.hpp"
+
 class App
 {
 public:
-    App();
+    App(int, char**);
     int run();
 private:
+    void ParseConsoleInput(Settings&, std::unordered_map<std::string_view, 
+                        std::string>&, int, char**);
     Settings settings;
     std::vector<Field> fields;
     sf::RenderWindow window;

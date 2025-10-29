@@ -37,6 +37,7 @@ public:
     void SetSpriteOrigin(sf::Vector2f);
     void SetSpritePosition(sf::Vector2f);
     void SetSpriteScale(sf::Vector2f);
+    void SetFieldPosition(sf::Vector2f);
     // draw and animate
     void update(float);
     void draw(sf::RenderTarget& rt) const { rt.draw(sprite_); }
@@ -59,5 +60,6 @@ protected:
     Direction direction_;
     Face face_;
     int frame_;
+    sf::Vector2f field_position_;
 };
 
