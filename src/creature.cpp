@@ -128,6 +128,5 @@ void Creature::SetFieldPosition(sf::Vector2f position)
 {
     this->field_position_ = position;
     sf::Vector2f adjusted_position = Field::FieldToScreenTX(position, this->settings_.screen_extrema, this->settings_.field_extrema);
-    std::cout << "x: " << adjusted_position.x << ", y: " << adjusted_position.y << std::endl;
     SetSpritePosition(adjusted_position);
 }

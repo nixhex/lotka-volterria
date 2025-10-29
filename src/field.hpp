@@ -13,11 +13,6 @@ template <typename T> struct Extrema {
     T y_max;
 };
 
-// template <typename T> struct Point {
-//     T x;
-//     T y;
-// };
-
 class Field
 {
 public:
@@ -34,7 +29,4 @@ protected:
     std::vector<Creature> creatures_;
     const AssetManager& assets_;
     const sf::RenderWindow& window_;
-    // sf::Vector2i field_dimensions_;
-    // Extrema<float> FieldExtrema;
-    // Extrema<float> ScreenExtrema;
 };
