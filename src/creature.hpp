@@ -14,10 +14,10 @@
 class Creature
 {
 public:
-    Creature(const Settings&, const sf::Texture&, SpeciesRole, Direction, Face, 
-        sf::Vector2f position, 
-        sf::Vector2f scale, 
-        int frame);
+    Creature(const Settings&, const sf::Texture&, SpeciesRole, /* Direction, Face, */ 
+        sf::Vector2f initial_position, 
+        sf::Vector2f initial_velocity,
+        sf::Vector2f scale);
     std::string Species();
     void Eat();
     void Move();
@@ -27,9 +27,10 @@ public:
     void Die();
     float Hunger(); // 0...1
     float Libido(); // 0...1
-    std::array<float, 2> Velocity(); // keys "X" and "Y"
+    sf::Vector2f Velocity(); // keys "X" and "Y"
+    void SetVelocity(sf::Vector2f);
     float Speed(); // return absolute of Velocity
-    std::array<float, 2> Position();
+    sf::Vector2f FieldPosition();
     std::time_t TimeBorn();
     std::time_t Age();
     static float Distance(Creature, Creature);
@@ -46,8 +47,11 @@ protected:
     std::string species_;
     float hunger_ = 0;
     float libido_ = 0;
-    std::array<float, 2> velocity_;
-    std::array<float, 2> position_;
+    //std::array<float, 2> velocity_;
+    sf::Vector2f velocity_;
+    sf::Vector2f field_position_;
+    sf::Vector2f scale_;
+    //std::array<float, 2> position_;
     std::time_t timeborn_;
     std::time_t age_;
     std::string sound_;
@@ -59,7 +63,7 @@ protected:
     bool sprite_mirrored_ = false;
     Direction direction_;
     Face face_;
-    int frame_;
-    sf::Vector2f field_position_;
+    int frame_=0;
+    float total_time_=0;
 };
 

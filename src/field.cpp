@@ -49,6 +49,13 @@ Field::Field(const Settings& settings, AssetManager& assets, sf::RenderWindow& w
     std::normal_distribution<float> dist_x_pred(u_pred_x, std_dev_x);
     std::normal_distribution<float> dist_y(u_y, std_dev_y);
 
+    // initialize velocity for prey
+    std::uniform_real_distribution<float> dist_x_velocity_prey(-100.f, 100.f);
+    std::uniform_real_distribution<float> dist_y_velocity_prey(-100.f, 100.f);
+    // initialize velocity for preds
+    std::uniform_real_distribution<float> dist_x_velocity_pred(-200.f, 200.f);
+    std::uniform_real_distribution<float> dist_y_velocity_pred(-200.f, 200.f);
+
     // direction and mirroring
     std::uniform_int_distribution<int> dist_direction(static_cast<int>(Direction::Side), static_cast<int>(Direction::Up));
     std::bernoulli_distribution dist_face(0.5);
@@ -61,9 +68,9 @@ Field::Field(const Settings& settings, AssetManager& assets, sf::RenderWindow& w
         direction = dist_direction(engine);
         face = dist_face(engine) ? Face::Right : Face::Left;
         this->creatures_.emplace_back(this->settings_, sheet, SpeciesRole::Prey,
-            static_cast<Direction>(direction), face, 
             sf::Vector2f{static_cast<float>(dist_x_prey(engine)), static_cast<float>(dist_y(engine))},
-            sf::Vector2f{this->settings_.scale_factor, this->settings_.scale_factor}, 0);
+            sf::Vector2f{static_cast<float>(dist_x_velocity_prey(engine)), static_cast<float>(dist_y_velocity_prey(engine))},
+            sf::Vector2f{this->settings_.scale_factor, this->settings_.scale_factor});
     }  
 
     for (int i=0; i<numPred; i++)
@@ -71,19 +78,10 @@ Field::Field(const Settings& settings, AssetManager& assets, sf::RenderWindow& w
         direction = dist_direction(engine);
         face = dist_face(engine) ? Face::Right : Face::Left;
         this->creatures_.emplace_back(this->settings_, sheet, SpeciesRole::Predator,
-            static_cast<Direction>(direction), face, 
             sf::Vector2f{static_cast<float>(dist_x_pred(engine)), static_cast<float>(dist_y(engine))},
-            sf::Vector2f{this->settings_.scale_factor, this->settings_.scale_factor}, 0);
+            sf::Vector2f{static_cast<float>(dist_x_velocity_pred(engine)), static_cast<float>(dist_y_velocity_pred(engine))},
+            sf::Vector2f{this->settings_.scale_factor, this->settings_.scale_factor});
     }   
-
-    // this->creatures_.emplace_back(this->settings_, sheet, SpeciesRole::Prey,
-    //     static_cast<Direction>(Direction::Side), Face::Right, 
-    //     sf::Vector2f{250, 750},
-    //     sf::Vector2f{this->settings_.scale_factor, this->settings_.scale_factor}, 0);
-    // this->creatures_.emplace_back(this->settings_, sheet, SpeciesRole::Predator,
-    //     static_cast<Direction>(Direction::Side), Face::Left, 
-    //     sf::Vector2f{750, 250},
-    //     sf::Vector2f{this->settings_.scale_factor, this->settings_.scale_factor}, 0);
 }
 
 std::vector<Creature>& Field::GetCreatures()

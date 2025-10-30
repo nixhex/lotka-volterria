@@ -19,8 +19,8 @@ App::App(int argc, char** argv)
     std::cout << "sf   = " << this->settings.scale_factor << std::endl;
 
     this->settings.field_extrema = { 
-        0.f, 1000.f, 
-        0.f, 1000.f
+        0.f, 540.f, 
+        0.f, 960.f
     }; // xmin, xmax, ymin, ymax
     
     float x_min_screen = this->settings.sprite_width/2*this->settings.scale_factor;
@@ -41,8 +41,11 @@ App::App(int argc, char** argv)
 
 int App::run()
 {
+    sf::Clock clock;
     while (window.isOpen())
     {
+        sf::Time dt = clock.restart();
+        float deltaTimeSec= dt.asSeconds(); 
         while (const std::optional event = window.pollEvent())
         {
             if (event->is<sf::Event::Closed>())
@@ -56,6 +59,7 @@ int App::run()
         {
             for (Creature& creature : field.GetCreatures())
             {
+                creature.update(deltaTimeSec);
                 window.draw(creature.GetSprite());           
             }
         }
