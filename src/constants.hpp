@@ -20,6 +20,8 @@ constexpr std::string_view prey_sound_default  = "Baaah";
 constexpr std::string_view predator_sound_default  = "Awoooo";
 constexpr int numprey_default = 100;
 constexpr int numpred_default = 10;
+constexpr float vmax_default = 400.f;
+constexpr float hunger_tick_seconds_default = 0.5f;
 
 
 // constexpr sf::Vector2i poseOffset(const Settings& settings, SpeciesRole role, Direction dir, int frame)

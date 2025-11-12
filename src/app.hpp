@@ -28,4 +28,5 @@ private:
     int predator_row_offset = settings.predator_row_offset;
     int predator_col_offset = settings.predator_col_offset;
     float scale_factor = settings.scale_factor;
+    sf::Clock global_clock;
 };
